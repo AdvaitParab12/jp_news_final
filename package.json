@@ -1,0 +1,27 @@
+{
+  "name": "jp_news_final",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --webpack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "cloudinary": "^2.8.0",
+    "lucide-react": "^0.562.0",
+    "mongoose": "^9.0.2",
+    "multer": "^2.0.2",
+    "next": "16.1.0",
+    "next-cloudinary": "^6.17.5",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.0",
+    "tailwindcss": "^4"
+  }
+}
