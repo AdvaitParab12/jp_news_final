@@ -8,7 +8,7 @@ export default function LocalNewsBlock() {
 
   const fetchNews = async () => {
     try {
-      const res = await fetch("/api/news");
+      const res = await fetch("/api/local-news");
       const data = await res.json();
       setNewsItems(Array.isArray(data) ? data : []);
     } catch (err) {

@@ -101,7 +101,7 @@ export async function DELETE(req, context) {
       status: 200,
     });
   } catch (error) {
-    console.error("DELETE /api/news/[id] error:", error);
+    console.error("DELETE /api/local-news/[id] error:", error);
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
     });

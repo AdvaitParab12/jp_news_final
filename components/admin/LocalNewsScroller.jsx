@@ -16,12 +16,16 @@ const AdminPage = () => {
     imageDescription: "",
     category: "",
     date: "",
+    scrollers: {
+      local: true,
+      mumbai: false,
+    },
   });
 
   // Fetch all news
   const fetchNews = async () => {
     try {
-      const res = await fetch("/api/news");
+      const res = await fetch("/api/local-news");
       const data = await res.json();
       setNewsList(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -41,6 +45,29 @@ const AdminPage = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleScrollerChange = (e) => {
+    const { name, checked } = e.target;
+
+    setFormData((prev) => {
+      const next = {
+        ...prev,
+        scrollers: {
+          ...prev.scrollers,
+          [name]: checked,
+        },
+      };
+
+      // Ensure at least one checkbox stays checked
+      if (!next.scrollers.local && !next.scrollers.mumbai) {
+        // revert change and keep the other checked
+        alert("At least one section must be selected.");
+        return prev;
+      }
+
+      return next;
+    });
   };
 
   // Handle image file input
@@ -77,35 +104,58 @@ const AdminPage = () => {
         uploadedPublicId = uploadJson.publicId || null;
       }
 
-      const method = formData._id ? "PUT" : "POST";
-      const url = formData._id
-        ? `/api/news/${formData._id.toString()}`
-        : "/api/news";
+      // Create payload
+      const payload = {
+        title: formData.title,
+        excerpt: formData.description,
+        image: imageUrl,
+        imagePublicId: uploadedPublicId,
+        imageTitle: formData.imageTitle || null,
+        imageDescription: formData.imageDescription || null,
+        category: formData.category,
+        date: formData.date,
+        createdAt: new Date().toISOString(),
+      };
 
-      const res = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: formData.title,
-          excerpt: formData.description,
-          image: imageUrl,
-          imagePublicId: uploadedPublicId,
-          imageTitle: formData.imageTitle || null,
-          imageDescription: formData.imageDescription || null,
-          category: formData.category,
-          date: formData.date,
-          createdAt: new Date().toISOString(),
-        }),
-      });
+      // Determine targets based on checkboxes. For creates (no _id) we POST to each selected endpoint.
+      const targets = [];
+      if (formData.scrollers.local)
+        targets.push({ url: "/api/local-news", name: "local" });
+      if (formData.scrollers.mumbai)
+        targets.push({ url: "/api/mumbai-news", name: "mumbai" });
 
-      if (!res.ok) {
-        const errorData = await res
-          .json()
-          .catch(() => ({ error: "Unknown error" }));
-        throw new Error(errorData.error || `HTTP error! status: ${res.status}`);
+      if (targets.length === 0) {
+        alert("Select at least one section to publish to.");
+        return;
       }
 
-      // Reset form
+      // If editing existing item (_id present) we update only the local endpoint by default.
+      // (Editing across both collections requires separate IDs.)
+      if (formData._id) {
+        const res = await fetch(`/api/local-news/${formData._id.toString()}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error("Update failed");
+      } else {
+        // Create in each selected section
+        for (const t of targets) {
+          const res = await fetch(t.url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          if (!res.ok) {
+            const errorData = await res
+              .json()
+              .catch(() => ({ error: "Unknown" }));
+            throw new Error(errorData.error || `Publish to ${t.name} failed`);
+          }
+        }
+      }
+
+      // Reset form (default to Local selected)
       setFormData({
         _id: null,
         title: "",
@@ -116,6 +166,7 @@ const AdminPage = () => {
         imageDescription: "",
         category: "",
         date: "",
+        scrollers: { local: true, mumbai: false },
       });
 
       // Refresh news list
@@ -134,7 +185,7 @@ const AdminPage = () => {
     console.log("Deleting id:", id);
     if (!confirm("Are you sure you want to delete this news?")) return;
     try {
-      const res = await fetch(`/api/news/${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/local-news/${id}`, { method: "DELETE" });
       console.log("Delete response:", res);
       if (!res.ok) throw new Error("Delete failed");
 
@@ -160,6 +211,7 @@ const AdminPage = () => {
       imageDescription: news.image?.description || "",
       category: news.category || "",
       date: news.date || "",
+      scrollers: { local: true, mumbai: false },
     });
   };
 
@@ -279,8 +331,8 @@ const AdminPage = () => {
                     <input
                       type="checkbox"
                       name="local"
-                      // checked={formData.scrollers.local}
-                      // onChange={handleScrollerChange}
+                      checked={!!formData.scrollers?.local}
+                      onChange={handleScrollerChange}
                       className="h-6 w-6 accent-blue-500"
                     />
                     <span className="text-md font-medium mx-2">Local News</span>
@@ -290,8 +342,8 @@ const AdminPage = () => {
                     <input
                       type="checkbox"
                       name="mumbai"
-                      // checked={formData.scrollers.mumbai}
-                      // onChange={handleScrollerChange}
+                      checked={!!formData.scrollers?.mumbai}
+                      onChange={handleScrollerChange}
                       className="h-6 w-6 accent-blue-500"
                     />
                     <span className="text-md font-medium mx-2">
@@ -319,6 +371,11 @@ const AdminPage = () => {
                         description: "",
                         image: null,
                         preview: null,
+                        imageTitle: "",
+                        imageDescription: "",
+                        category: "",
+                        date: "",
+                        scrollers: { local: true, mumbai: false },
                       })
                     }
                     className="bg-gray-400 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-500 transition"
@@ -348,7 +405,9 @@ const AdminPage = () => {
                       />
                       <div>
                         <h4 className="font-semibold">{news.title}</h4>
-                        <p className="text-sm line-clamp-1 w-250">{news.excerpt}</p>
+                        <p className="text-sm line-clamp-1 w-250">
+                          {news.excerpt}
+                        </p>
                       </div>
                     </div>
                     <div className="flex gap-2">

@@ -55,9 +55,9 @@ export default function MumbaiNewsBlock() {
                     <h4 className="ellipsis">
                       <Link href={`/local-news/${item._id}`}>{item.title}</Link>
                     </h4>
-                    <div className="text-xs text-gray-500 mb-1">
+                    {/* <div className="text-xs text-gray-500 mb-1">
                       {item.category}
-                    </div>
+                    </div> */}
                     <p
                       style={{
                         whiteSpace: "nowrap",

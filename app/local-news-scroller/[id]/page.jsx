@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 async function getNewsById(id) {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-  const res = await fetch(`${base}/api/news/${id}`, { cache: "no-store" });
+  const res = await fetch(`${base}/api/local-news/${id}`, { cache: "no-store" });
 
   if (!res.ok) return null;
   return res.json();

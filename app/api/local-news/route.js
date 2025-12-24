@@ -20,7 +20,7 @@ export async function GET() {
 
     return new Response(JSON.stringify(normalized), { status: 200 });
   } catch (error) {
-    console.error("GET /api/news error:", error);
+    console.error("GET /api/local-news error:", error);
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
     });
@@ -83,7 +83,7 @@ export async function POST(req) {
       status: 201,
     });
   } catch (error) {
-    console.error("POST /api/news error:", error);
+    console.error("POST /api/local-news error:", error);
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
     });
