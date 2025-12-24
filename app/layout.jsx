@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
 
         {/* CSS */}
         <link rel="stylesheet" href="/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="/css/main.css" />
+        {/* <link rel="stylesheet" href="/css/main.css" /> */}
         <link rel="stylesheet" href="/css/style.css" />
         <link rel="stylesheet" href="/css/colors.css" />
         <link rel="stylesheet" href="/css/responsive.css" />

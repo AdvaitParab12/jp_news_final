@@ -45,7 +45,7 @@ export default function InterviewScroller() {
                   <div className="item-image">
                     <Link href={`/interviews/${item._id}`} className="img-link">
                       <Image
-                        src={item.thumbnail || "/img/placeholder.png"}
+                        src={item.thumbnail}
                         alt={item.title}
                         width={400}
                         height={250}
@@ -55,7 +55,12 @@ export default function InterviewScroller() {
                   </div>
                   <div className="item-content">
                     <h4 className="ellipsis">
-                      <Link href={`/interviews/${item._id}`}>{item.title}</Link>
+                      <Link
+                        href={`/interviews/${item._id}`}
+                        className="line-clamp-2"
+                      >
+                        {item.title}
+                      </Link>
                     </h4>
                   </div>
                 </div>

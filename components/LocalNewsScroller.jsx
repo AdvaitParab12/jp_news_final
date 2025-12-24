@@ -61,15 +61,16 @@ export default function LocalNewsBlock() {
                     <h4 className="ellipsis">
                       <Link
                         href={`/local-news-scroller/${item._id}`}
-                       
+                       className="line-clamp-2"
                       >
                         {item.title}
                       </Link>
                     </h4>
 
-                    <p className="ellipsis line-clamp-3 truncate">
+                    <p className="ellipsis line-clamp-2">
                       <Link
                         href={`/local-news-scroller/${item._id}`}
+                        className="line-clamp-1"
                       >
                         {item.excerpt}
                       </Link>

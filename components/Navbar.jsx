@@ -90,32 +90,50 @@ export default function Navbar() {
                 </Link>
               </li>
               <li>
-                <Link href="/about-us" className={isActive("/about-us") ? "active" : ""}>
+                <Link
+                  href="/about-us"
+                  className={isActive("/about-us") ? "active" : ""}
+                >
                   ABOUT US
                 </Link>{" "}
               </li>
               <li>
-                <Link href="/local-news" className={isActive("/local-news") ? "active" : ""}>
+                <Link
+                  href="/local-news"
+                  className={isActive("/local-news") ? "active" : ""}
+                >
                   LOCAL NEWS
                 </Link>
               </li>
               <li>
-                <Link href="/mumbai-news" className={isActive("/local-news") ? "active" : ""}>
+                <Link
+                  href="/mumbai-news"
+                  className={isActive("/local-news") ? "active" : ""}
+                >
                   MUMBAI NEWS
                 </Link>
               </li>
               <li>
-                <Link href="/interview" className={isActive("/interview") ? "active" : ""}>
+                <Link
+                  href="/interviews"
+                  className={isActive("/interviews") ? "active" : ""}
+                >
                   INTERVIEWS
                 </Link>
               </li>
               <li>
-                <Link href="/photo-gallery" className={isActive("/photo-gallery") ? "active" : ""}>
+                <Link
+                  href="/photos-gallery"
+                  className={isActive("/photos-gallery") ? "active" : ""}
+                >
                   PHOTOGALLERY
                 </Link>
               </li>
               <li>
-                <Link href="/contact-us" className={isActive("/contact-us") ? "active" : ""}>
+                <Link
+                  href="/contact-us"
+                  className={isActive("/contact-us") ? "active" : ""}
+                >
                   CONTACT US
                 </Link>
               </li>
@@ -128,25 +146,65 @@ export default function Navbar() {
         <div className="main-menu nav navbar-collapse" id="fixed-navbar-toggle">
           <div className="container">
             <ul className="nav navbar-nav">
-              <li className={isActive("/") ? "active hover-underline" : "hover-underline"}>
+              <li
+                className={
+                  isActive("/") ? "active hover-underline" : "hover-underline"
+                }
+              >
                 <Link href="/">HOME</Link>
               </li>
-              <li className={isActive("/about-us") ? "active hover-underline" : "hover-underline"}>
+              <li
+                className={
+                  isActive("/about-us")
+                    ? "active hover-underline"
+                    : "hover-underline"
+                }
+              >
                 <Link href="/about-us">ABOUT US</Link>{" "}
               </li>
-              <li className={isActive("/local-news") ? "active hover-underline" : "hover-underline"}>
+              <li
+                className={
+                  isActive("/local-news")
+                    ? "active hover-underline"
+                    : "hover-underline"
+                }
+              >
                 <Link href="/local-news">LOCAL NEWS</Link>
               </li>
-              <li className={isActive("/mumbai-news") ? "active hover-underline" : "hover-underline"}>
+              <li
+                className={
+                  isActive("/mumbai-news")
+                    ? "active hover-underline"
+                    : "hover-underline"
+                }
+              >
                 <Link href="/mumbai-news">MUMBAI NEWS</Link>
               </li>
-              <li className={isActive("/interview") ? "active hover-underline" : "hover-underline"}>
-                <Link href="/interview">INTERVIEWS</Link>
+              <li
+                className={
+                  isActive("/interviews")
+                    ? "active hover-underline"
+                    : "hover-underline"
+                }
+              >
+                <Link href="/interviews">INTERVIEWS</Link>
               </li>
-              <li className={isActive("/photo-gallery") ? "active hover-underline" : "hover-underline"}>
-                <Link href="/photo-gallery">PHOTOGALLERY</Link>
+              <li
+                className={
+                  isActive("/photos-gallery")
+                    ? "active hover-underline"
+                    : "hover-underline"
+                }
+              >
+                <Link href="/photos-gallery">PHOTOGALLERY</Link>
               </li>
-              <li className={isActive("/contact-us") ? "active hover-underline" : "hover-underline"}>
+              <li
+                className={
+                  isActive("/contact-us")
+                    ? "active hover-underline"
+                    : "hover-underline"
+                }
+              >
                 <Link href="/contact-us">CONTACT US</Link>
               </li>
             </ul>

@@ -6,6 +6,7 @@ import QuickNav from "@/components/QuickNav";
 import BottomHomeAdBlock from "@/components/HomeBottomAdBlock";
 import { AD_SECTIONS } from "@/lib/adSections";
 import { getSliderImages } from "@/lib/getSliderImages";
+import StaticAd from "@/components/StaticAd";
 export default async function AboutUs() {
   const bottomImagesData = await getSliderImages(AD_SECTIONS.BOTTOM_HOME);
     const bottomImages = (bottomImagesData || [])
@@ -28,7 +29,7 @@ export default async function AboutUs() {
                 {/* Begin .contact-us */}
                 <div className="contact-us">
                   {/* Begin .contact-form */}
-                  <div className="col-xs-12 col-sm-7 col-md-10 mb-70">
+                  <div className="col-xs-12 col-sm-7 col-md-9 mb-70">
                     <div className="title-left title-style04 underline04">
                       <h3>About Us </h3>
                     </div>
@@ -78,8 +79,8 @@ export default async function AboutUs() {
                       </p>
                     </div>
                   </div>
-                  <div className="col-md-2">
-                    <img src="img/Janta_prakash_.jpg" className="#" />
+                  <div className="col-md-3">
+                    <StaticAd />
                   </div>
                   {/* End .contact-form */}
                 </div>

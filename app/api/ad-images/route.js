@@ -32,6 +32,6 @@ export async function GET(request) {
       { error: "Failed to fetch images" },
       { status: 500 }
     );
+    console.log("RAW DB DOC:", images[0]);
   }
 }
-

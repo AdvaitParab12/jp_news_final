@@ -14,11 +14,11 @@ import LocalNewsScroller from "@/components/LocalNewsScroller";
 import MumbaiNewsScroller from "@/components/MumbaiNewsScroller";
 import InterviewScroller from "@/components/InterviewScroller";
 
+
 export default async function Page() {
   const topImagesData = await getSliderImages(AD_SECTIONS.TOP_HOME);
-  const topImages = (topImagesData || [])
-    .map((img) => img?.url)
-    .filter(Boolean);
+  const topImages = topImagesData || [];
+
   const middleImagesData = await getSliderImages(AD_SECTIONS.MIDDLE_HOME);
   const middleImages = (middleImagesData || [])
     .map((img) => img?.url)
@@ -27,47 +27,6 @@ export default async function Page() {
   const bottomImages = (bottomImagesData || [])
     .map((img) => img?.url)
     .filter(Boolean);
-
-  // Debug: log images to console (server-side)
-  if (topImages.length > 0) {
-    console.log("Page - Top images:", topImages);
-  } else {
-    console.log("Page - No top images found");
-  }
-  if (bottomImages.length > 0) {
-    console.log("Page - Bottom images:", bottomImages);
-  } else {
-    console.log("Page - No bottom images found");
-  }
-  if (middleImages.length > 0) {
-    console.log("Page - Bottom images:", middleImages);
-  } else {
-    console.log("Page - No bottom images found");
-  }
-  // const newsItems = [
-  //   {
-  //     id: 1,
-  //     image: "/img/Udhav.jpg",
-  //     title: "उद्धव ठाकरेंनी एकनाथ शिंदेचा बालेकिल्ला",
-  //     excerpt: "शिवसेना उद्धव बाळासाहेब ठाकरे पक्षाने.",
-  //     url: "#",
-  //   },
-  //   {
-  //     id: 2,
-  //     image: "/img/Shruti.jpg",
-  //     title: "स्मृती आणि पलाशचं लग्न होणार की नाही?",
-  //     excerpt: "यांच्या लग्नाबाबत रोज काही ना काही.",
-  //     url: "#",
-  //   },
-  //   {
-  //     id: 3,
-  //     image: "/img/hardik.jpg",
-  //     title: "अभिषेक शर्माकडून हार्दिक पांड्याची धुलाई, 18 चेंडूत…",
-  //     excerpt: "सय्यद मुश्ताक अली ट्रॉफी 2025 स्पर्धेत.",
-  //     url: "#",
-  //   },
-  //   // Add more items or repeat if necessary
-  // ];
 
   return (
     <div id="wrapper" data-color="red" className="overflow-hidden">
@@ -120,44 +79,6 @@ export default async function Page() {
 
             <div className="col-md-4">
               <InterviewScroller />
-            </div>
-
-            {/* <LocalNewsBlock />
-            <MumbaiNewsBlock /> */}
-
-            <div className="col-md-4">
-              {/* <div className="sidebar-newsfeed">
-                <div className="newsfeed-3">
-                  <ul>
-                    {newsItems.map((item, index) => (
-                      <li key={index}>
-                        <div className="item">
-                          <div className="item-image">
-                            <Link href={item.url} className="img-link">
-                              <Image
-                                src={item.image}
-                                alt={item.title}
-                                width={400} // Adjust based on your CSS
-                                height={250} // Adjust based on your CSS
-                                className="img-responsive img-full"
-                                style={{ objectFit: "cover" }}
-                              />
-                            </Link>
-                          </div>
-                          <div className="item-content">
-                            <h4 className="ellipsis">
-                              <Link href={item.url}>{item.title}</Link>
-                            </h4>
-                            <p className="ellipsis">
-                              <Link href={item.url}>{item.excerpt}</Link>
-                            </p>
-                          </div>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div> */}
             </div>
           </div>
           <HomeBottomAdBlock images={bottomImages} />

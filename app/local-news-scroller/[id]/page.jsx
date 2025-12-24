@@ -25,7 +25,7 @@ export default async function NewsDetail({ params }) {
       <div id="main-section">
         <section className="module-top mt50">
           <div className="container">
-            <div className="breadcrumb-line">
+            <div className="breadcrumb-line mb-10">
               <ul className="breadcrumb">
                 <li>
                   <h5>Local News</h5>

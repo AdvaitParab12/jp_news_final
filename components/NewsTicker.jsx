@@ -43,7 +43,7 @@ export default function NewsTicker() {
         {item.href ? (
           <Link href={item.href} target="_blank">{item.title}</Link>
         ) : (
-          <span>{item.title}</span>
+          <span className="inline-block w-1">{item.title}</span>
         )}
       </h4>
     </div>

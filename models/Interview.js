@@ -12,7 +12,6 @@ const InterviewSchema = new mongoose.Schema(
       title: String,
       description: String,
     },
-    date: { type: String },
   },
   { timestamps: true }
 );

@@ -14,6 +14,10 @@ const AdminMumbai = () => {
     imageDescription: "",
     category: "",
     date: "",
+    scrollers: {
+      local: false,
+      mumbai: true,
+    },
   });
 
   const fetchNews = async () => {
@@ -45,6 +49,17 @@ const AdminMumbai = () => {
       ...prev,
       image: file,
       preview: URL.createObjectURL(file),
+    }));
+  };
+  const handleScrollerChange = (e) => {
+    const { name, checked } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      scrollers: {
+        ...prev.scrollers,
+        [name]: checked,
+      },
     }));
   };
 
@@ -259,6 +274,7 @@ const AdminMumbai = () => {
                   required
                 />
               </div>
+              
 
               <div className="flex gap-4">
                 <button

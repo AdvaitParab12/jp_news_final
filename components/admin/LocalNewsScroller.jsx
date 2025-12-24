@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { ChevronRight, Newspaper, Trash2, Edit2 } from "lucide-react";
+import { Trash2, Edit2 } from "lucide-react";
 
 const AdminPage = () => {
   const [selectedSection, setSelectedSection] = useState(0);
@@ -164,16 +164,16 @@ const AdminPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 p-10 w-full">
+    <div className="w-full mx-auto p-6 space-y-6 bg-white border border-gray-300 rounded-2xl">
       <div className="mx-auto grid grid-cols-1 md:grid-cols-4 gap-20">
         {/* Content */}
         <div className="col-span-1 md:col-span-5">
-          <div className="bg-white rounded-lg p-8 shadow-sm border min-h-75">
+          <div className="bg-white rounded-lg p-8 min-h-75">
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
-              <h2 className="text-2xl font-bold text-slate-800">
+              <h1 className="text-2xl font-semibold text-orange-400!">
                 {formData._id ? "Edit News" : "Add News"}
-              </h2>
+              </h1>
 
               <div>
                 <label className="block text-sm font-semibold mb-2">
@@ -196,66 +196,54 @@ const AdminPage = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-semibold mb-2">
-                    Image Title
-                  </label>
                   <input
                     type="text"
                     name="imageTitle"
                     value={formData.imageTitle}
                     onChange={handleChange}
                     placeholder="Image title"
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                    className="w-full p-2 border border-gray-300 rounded-xl outline-orange-400"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold mb-2">
-                    Image Description
-                  </label>
                   <input
                     type="text"
                     name="imageDescription"
                     value={formData.imageDescription}
                     onChange={handleChange}
                     placeholder="Optional image description"
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                    className="w-full p-2 border border-gray-300 rounded-xl outline-orange-400"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold mb-2">
-                  Title
-                </label>
                 <input
                   type="text"
                   name="title"
                   value={formData.title}
                   onChange={handleChange}
                   placeholder="Enter title"
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                  className="w-full p-2 border border-gray-300 rounded-xl outline-orange-400"
                   required
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4">
                 <div>
-                  <label className="block text-sm font-semibold mb-2">
-                    Category
-                  </label>
                   <input
                     type="text"
                     name="category"
                     value={formData.category}
                     onChange={handleChange}
                     placeholder="Enter category"
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                    className="w-full p-2 border border-gray-300 rounded-xl outline-orange-400"
                     required
                   />
                 </div>
 
-                <div>
+                {/* <div>
                   <label className="block text-sm font-semibold mb-2">
                     Date
                   </label>
@@ -267,28 +255,56 @@ const AdminPage = () => {
                     className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
                     required
                   />
-                </div>
+                </div> */}
               </div>
 
               <div>
-                <label className="block text-sm font-semibold mb-2">
-                  Description
-                </label>
                 <textarea
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
                   placeholder="Enter description"
                   rows={4}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                  className="w-full p-2 border border-gray-300 rounded-xl outline-orange-400"
                   required
                 />
+              </div>
+              <div className="block border p-2 rounded-xl border-gray-300">
+                <label className="block text-2xl font-bold mb-2">
+                  Publish To Sections
+                </label>
+
+                <div className="flex gap-10 mt-2 ">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="local"
+                      // checked={formData.scrollers.local}
+                      // onChange={handleScrollerChange}
+                      className="h-6 w-6 accent-blue-500"
+                    />
+                    <span className="text-md font-medium mx-2">Local News</span>
+                  </label>
+
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="mumbai"
+                      // checked={formData.scrollers.mumbai}
+                      // onChange={handleScrollerChange}
+                      className="h-6 w-6 accent-blue-500"
+                    />
+                    <span className="text-md font-medium mx-2">
+                      Mumbai News
+                    </span>
+                  </label>
+                </div>
               </div>
 
               <div className="flex gap-4">
                 <button
                   type="submit"
-                  className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition"
+                  className="bg-orange-400 text-white! px-6 py-3 rounded-lg font-semibold hover:bg-orange-500 transition"
                 >
                   {formData._id ? "Update News" : "Save News"}
                 </button>
@@ -315,12 +331,14 @@ const AdminPage = () => {
 
             {/* News List */}
             <div className="mt-10">
-              <h2 className="text-xl font-bold mb-4">All News</h2>
+              <h2 className="text-xl font-bold mb-4 text-orange-400!">
+                All News
+              </h2>
               <ul className="space-y-3">
                 {newsList.map((news) => (
                   <li
                     key={news._id}
-                    className="flex items-center justify-between border p-3 rounded-lg"
+                    className="flex items-center justify-between border border-gray-300 p-3 rounded-lg"
                   >
                     <div className="flex items-center gap-3">
                       <img
@@ -330,21 +348,21 @@ const AdminPage = () => {
                       />
                       <div>
                         <h4 className="font-semibold">{news.title}</h4>
-                        <p className="text-sm">{news.excerpt}</p>
+                        <p className="text-sm line-clamp-1 w-250">{news.excerpt}</p>
                       </div>
                     </div>
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleEdit(news)}
-                        className="text-blue-500 hover:text-blue-700"
+                        className="bg-amber-400 text-white! rounded-xl p-3 h-14 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        <Edit2 />
+                        Edit
                       </button>
                       <button
                         onClick={() => handleDelete(news._id)}
-                        className="text-red-500 hover:text-red-700"
+                        className="bg-red-600 text-white! rounded-xl p-3 h-14 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        <Trash2 />
+                        Delete
                       </button>
                     </div>
                   </li>

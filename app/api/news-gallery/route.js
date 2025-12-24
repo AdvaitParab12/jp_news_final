@@ -39,7 +39,7 @@ export async function POST(req) {
       description: body.description || "",
       videoUrl: body.videoUrl,
       createdBy: body.createdBy || "",
-      date: body.date || new Date().toISOString().split("T")[0],
+      // date: body.date || new Date().toISOString().split("T")[0],
       image: body.image || undefined,
     });
 

@@ -13,8 +13,8 @@ export async function GET() {
         typeof n.image === "object" && n.image?.url
           ? n.image.url
           : n.image || "",
-      createdAt: n.createdAt ? new Date(n.createdAt).toISOString() : null,
-      updatedAt: n.updatedAt ? new Date(n.updatedAt).toISOString() : null,
+      // createdAt: n.createdAt ? new Date(n.createdAt).toISOString() : null,
+      // updatedAt: n.updatedAt ? new Date(n.updatedAt).toISOString() : null,
     }));
 
     return new Response(JSON.stringify(normalized), { status: 200 });

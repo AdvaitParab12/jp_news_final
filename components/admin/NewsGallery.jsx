@@ -42,7 +42,7 @@ export default function NewsGalleryAdmin() {
       description: form.get("description"),
       videoUrl: form.get("videoUrl"),
       createdBy: form.get("createdBy"),
-      date: form.get("date"),
+      // date: form.get("date"),
     };
 
     try {
@@ -78,64 +78,56 @@ export default function NewsGalleryAdmin() {
   }
 
   return (
-    <div className="w-full mx-auto p-6 space-y-8">
-      <div className="flex items-center gap-3">
-        <h1 className="text-2xl font-semibold">
+    <div className="w-full mx-auto p-6 space-y-8 border border-gray-300 rounded-xl">
+      <div className="flex items-center gap-3 ">
+        <h1 className="text-2xl font-semibold text-orange-400!">
           {editId ? "Edit Gallery Item" : "Add Gallery Item"}
         </h1>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border p-6 space-y-4">
+      <div className="bg-white rounded-2xl p-6 space-y-4">
         <form onSubmit={handleSubmit} className="space-y-4 flex flex-col">
           <label className="block">
-            <span className="text-sm font-medium text-gray-700">Title</span>
             <input
               name="title"
               placeholder="Title"
               required
               defaultValue={selected?.title || ""}
-              className="mt-1 block w-full px-3 py-2 border rounded-lg outline-none"
+              className="block w-full px-3 py-2 border border-gray-300 rounded-lg outline-orange-400"
             />
           </label>
 
           <label className="block">
-            <span className="text-sm font-medium text-gray-700">
-              Description
-            </span>
             <textarea
               name="description"
               placeholder="Description"
               defaultValue={selected?.description || ""}
               rows={3}
-              className="mt-1 block w-full px-3 py-2 border rounded-lg outline-none"
+              className="block w-full px-3 py-2 border border-gray-300 rounded-lg outline-orange-400"
             />
           </label>
 
           <label className="block">
-            <span className="text-sm font-medium text-gray-700">
-              Created By
-            </span>
             <input
               name="createdBy"
               placeholder="Creator name"
               defaultValue={selected?.createdBy || ""}
-              className="mt-1 block w-full px-3 py-2 border rounded-lg outline-none"
+              className="block w-full px-3 py-2 border border-gray-300 rounded-lg outline-orange-400"
             />
           </label>
 
           <label className="block">
-            <span className="text-sm font-medium text-gray-700">Video URL</span>
             <input
               name="videoUrl"
-              placeholder="https://..."
+              placeholder="Video URL"
               required
               defaultValue={selected?.videoUrl || ""}
-              className="mt-1 block w-full px-3 py-2 border rounded-lg outline-none"
+              className="block w-full px-3 py-2 border border-gray-300 rounded-lg outline-orange-400"
             />
           </label>
 
           <div className="grid grid-cols-1 gap-4">
-            <label className="block">
+            {/* <label className="block">
               <span className="text-sm font-medium text-gray-700">Date</span>
               <input
                 name="date"
@@ -143,13 +135,13 @@ export default function NewsGalleryAdmin() {
                 defaultValue={selected?.date || ""}
                 className="mt-1 block w-full px-3 py-2 border rounded-lg outline-none"
               />
-            </label>
+            </label> */}
           </div>
 
           <button
             type="submit"
             className={`w-full py-2.5 rounded-xl font-medium ${
-              editId ? "bg-yellow-500 text-white" : "bg-blue-600 text-white"
+              editId ? "bg-yellow-500 text-white!" : "bg-orange-400 text-white!"
             }`}
           >
             {editId ? "Update Item" : "Add Item"}
@@ -158,7 +150,7 @@ export default function NewsGalleryAdmin() {
       </div>
 
       <div className="bg-white rounded-2xl shadow-sm border p-6 space-y-4">
-        <h2 className="text-lg font-medium">Gallery Items</h2>
+        <h2 className="text-lg font-medium text-orange-400!">Gallery Items</h2>
         {items.length === 0 ? (
           <p className="text-sm text-gray-500">No items yet.</p>
         ) : (
@@ -173,30 +165,22 @@ export default function NewsGalleryAdmin() {
                     <h4 className="text-sm font-medium text-gray-900 truncate">
                       {it.title}
                     </h4>
-                    <p className="text-xs text-gray-500 mt-1 truncate">
+                    <p className="text-xs text-gray-500 mt-1 truncate w-250">
                       {it.description}
                     </p>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs text-gray-500">{it.date}</span>
-                      {it.createdBy && (
-                        <span className="text-xs text-gray-500">
-                          • {it.createdBy}
-                        </span>
-                      )}
-                    </div>
                   </div>
                 </div>
 
                 <div className="flex gap-2 shrink-0">
                   <button
                     onClick={() => setEditId(it._id)}
-                    className="px-3 py-1.5 text-sm rounded-lg bg-orange-400 text-yellow-800"
+                    className="px-3 py-1.5 text-sm rounded-lg bg-orange-400 text-white!"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleDelete(it._id)}
-                    className="px-3 py-1.5 text-sm rounded-lg bg-red-600 text-white"
+                    className="px-3 py-1.5 text-sm rounded-lg bg-red-600 text-white!"
                   >
                     Delete
                   </button>

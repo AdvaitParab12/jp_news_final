@@ -76,7 +76,7 @@ export async function POST(req) {
       excerpt: body.excerpt,
       image: imageData,
       category: body.category || "",
-      date: body.date || new Date().toISOString().split("T")[0],
+      // date: body.date || new Date().toISOString().split("T")[0],
     });
 
     return new Response(JSON.stringify({ insertedId: result._id.toString() }), {

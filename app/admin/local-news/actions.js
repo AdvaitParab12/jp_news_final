@@ -40,7 +40,7 @@ export async function addNews(formData) {
       title: formData.get("title"),
       excerpt: formData.get("excerpt"),
       category: formData.get("category"),
-      date: formData.get("date"),
+      // date: formData.get("date"),
       image: {
         url: upload.secure_url,
         public_id: upload.public_id,
@@ -95,7 +95,7 @@ export async function updateNews(id, formData) {
       title: formData.get("title"),
       excerpt: formData.get("excerpt"),
       category: formData.get("category"),
-      date: formData.get("date"),
+      // date: formData.get("date"),
       image: imageData,
     });
 

@@ -6,7 +6,6 @@ const NewsGallerySchema = new mongoose.Schema(
     description: { type: String },
     videoUrl: { type: String, required: true },
     createdBy: { type: String },
-    date: { type: String },
     // optional thumbnail/image object to mirror other models
     image: { type: mongoose.Schema.Types.Mixed },
   },

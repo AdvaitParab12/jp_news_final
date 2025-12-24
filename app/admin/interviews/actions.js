@@ -41,7 +41,7 @@ export async function addInterview(formData) {
         url: upload.secure_url,
         public_id: upload.public_id,
       },
-      date: formData.get("date") || new Date().toISOString().split("T")[0],
+      // date: formData.get("date") || new Date().toISOString().split("T")[0],
     });
 
     revalidatePath("/admin");
@@ -86,7 +86,7 @@ export async function updateInterview(id, formData) {
       title: formData.get("title"),
       excerpt: formData.get("excerpt") || "",
       videoUrl: formData.get("videoUrl"),
-      date: formData.get("date") || item.date,
+      // date: formData.get("date") || item.date,
       createdBy: formData.get("createdBy") || item.createdBy,
       thumbnail: thumbData,
     });

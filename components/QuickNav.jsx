@@ -9,7 +9,7 @@ export default function QuickNav() {
           <li>
             {" "}
             <a href="#" className="facebook">
-              <i className="fa fa-facebook" />
+              <i className="fa-brands fa-facebook-f"></i>
             </a>
           </li>
           <li>
@@ -20,7 +20,7 @@ export default function QuickNav() {
               className="youtube"
             >
               {" "}
-              <i className="fa fa-youtube" />
+              <i className="fa-brands fa-youtube"></i>
             </a>{" "}
           </li>
           <li>
@@ -31,7 +31,7 @@ export default function QuickNav() {
               className="instagram"
             >
               {" "}
-              <i className="fa fa-instagram" />
+              <i className="fa-brands fa-instagram"></i>
             </a>{" "}
           </li>
           <li>
@@ -41,7 +41,7 @@ export default function QuickNav() {
               target="_blank"
               className="twitter"
             >
-              <i className="fa fa-twitter" />
+              <i className="fa-brands fa-twitter"></i>
             </a>{" "}
           </li>
         </ul>

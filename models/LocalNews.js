@@ -5,7 +5,6 @@ const NewsSchema = new mongoose.Schema(
     title: { type: String, required: true },
     excerpt: { type: String, required: true },
     category: { type: String, required: true },
-    date: { type: String, required: true },
     image: {
       url: String,
       public_id: String,

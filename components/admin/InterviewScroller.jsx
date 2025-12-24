@@ -89,9 +89,9 @@ export default function InterviewAdmin() {
   }
 
   return (
-    <div className=" w-full mx-auto p-6 space-y-8">
-      <div className="flex items-center gap-3">
-        <h1 className="text-2xl font-semibold">
+    <div className=" w-full mx-auto p-6 space-y-8 border rounded-xl border-gray-300">
+      <div className="flex items-center gap-3  ">
+        <h1 className="text-2xl font-semibold text-orange-400!">
           {editId ? "Edit Interview" : "Add Interview"}
         </h1>
         {editId && (
@@ -101,55 +101,49 @@ export default function InterviewAdmin() {
         )}
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border p-6 space-y-4">
+      <div className="bg-white rounded-2xl p-6 space-y-4">
         <form onSubmit={handleSubmit} className="space-y-4 flex flex-col">
           <label className="block">
-            <span className="text-sm font-medium text-gray-700">Title</span>
             <input
               name="title"
               placeholder="Title"
               required
               defaultValue={selected?.title || ""}
-              className="mt-1 block w-full px-3 py-2 border rounded-lg outline-none"
+              className="w-full p-2 border border-gray-300 rounded-xl outline-orange-400"
             />
           </label>
 
           <label className="block">
-            <span className="text-sm font-medium text-gray-700">Excerpt</span>
             <textarea
               name="excerpt"
               placeholder="Excerpt"
               defaultValue={selected?.excerpt || ""}
               rows={3}
-              className="mt-1 block w-full px-3 py-2 border rounded-lg outline-none"
+              className="w-full p-2 border border-gray-300 rounded-xl outline-orange-400"
             />
           </label>
 
           <label className="block">
-            <span className="text-sm font-medium text-gray-700">
-              Created By
-            </span>
             <input
               name="createdBy"
               placeholder="Creator name"
               defaultValue={selected?.createdBy || ""}
-              className="mt-1 block w-full px-3 py-2 border rounded-lg outline-none"
+              className="w-full p-2 border border-gray-300 rounded-xl outline-orange-400"
             />
           </label>
 
           <label className="block">
-            <span className="text-sm font-medium text-gray-700">Video URL</span>
             <input
               name="videoUrl"
-              placeholder="https://..."
+              placeholder="Video URL"
               required
               defaultValue={selected?.videoUrl || ""}
-              className="mt-1 block w-full px-3 py-2 border rounded-lg outline-none"
+              className="w-full p-2 border border-gray-300 rounded-xl outline-orange-400"
             />
           </label>
 
           <div className="grid grid-cols-1 gap-4">
-            <label className="block">
+            {/* <label className="block">
               <span className="text-sm font-medium text-gray-700">Date</span>
               <input
                 name="date"
@@ -157,7 +151,7 @@ export default function InterviewAdmin() {
                 defaultValue={selected?.date || ""}
                 className="mt-1 block w-full px-3 py-2 border rounded-lg outline-none"
               />
-            </label>
+            </label> */}
 
             <label className="block">
               <span className="text-sm font-medium text-gray-700">
@@ -168,7 +162,7 @@ export default function InterviewAdmin() {
                 type="file"
                 name="thumbnail"
                 accept="image/*"
-                className="mt-1 block w-full text-sm file:mr-4 file:rounded-lg file:bg-blue-600 file:px-4 file:py-2 file:text-white"
+                className="mt-1 block w-full text-sm file:mr-4 file:rounded-lg file:bg-orange-500 file:px-4 file:py-2 file:text-white"
                 onChange={(e) => {
                   const f = e.target.files[0];
                   if (f) setPreview(URL.createObjectURL(f));
@@ -192,7 +186,7 @@ export default function InterviewAdmin() {
           <button
             type="submit"
             className={`w-full py-2.5 rounded-xl font-medium ${
-              editId ? "bg-yellow-500 text-white" : "bg-blue-600 text-white"
+              editId ? "bg-yellow-500 text-white!" : "bg-orange-400 text-white!"
             }`}
           >
             {editId ? "Update Interview" : "Add Interview"}
@@ -200,8 +194,8 @@ export default function InterviewAdmin() {
         </form>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border p-6 space-y-4">
-        <h2 className="text-lg font-medium">Interviews</h2>
+      <div className="bg-white rounded-2xl p-6 space-y-4">
+        <h2 className="text-lg font-medium text-orange-400!">Interviews List</h2>
         {items.length === 0 ? (
           <p className="text-sm text-gray-500">No interviews yet.</p>
         ) : (
@@ -209,7 +203,7 @@ export default function InterviewAdmin() {
             {items.map((it) => (
               <div
                 key={it._id}
-                className="flex items-center justify-between gap-4 p-3 rounded-xl border hover:bg-gray-50"
+                className="flex items-center justify-between gap-4 p-3 rounded-xl border border-gray-300 hover:bg-gray-50"
               >
                 <div className="flex items-center gap-4 flex-1 min-w-0">
                   {it.thumbnail?.url && (
@@ -223,7 +217,7 @@ export default function InterviewAdmin() {
                     <h4 className="text-sm font-medium text-gray-900 truncate">
                       {it.title}
                     </h4>
-                    <p className="text-xs text-gray-500 mt-1 truncate">
+                    <p className="text-xs text-gray-500 mt-1 truncate w-250">
                       {it.excerpt}
                     </p>
                     <div className="flex items-center gap-2 mt-1">
@@ -240,13 +234,13 @@ export default function InterviewAdmin() {
                 <div className="flex gap-2 shrink-0">
                   <button
                     onClick={() => setEditId(it._id)}
-                    className="px-3 py-1.5 text-sm rounded-lg bg-orange-400 text-yellow-800"
+                    className="px-3 py-1.5 text-sm rounded-lg bg-orange-400 text-white!"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleDelete(it._id)}
-                    className="px-3 py-1.5 text-sm rounded-lg bg-red-600 text-white"
+                    className="px-3 py-1.5 text-sm rounded-lg bg-red-600 text-white!"
                   >
                     Delete
                   </button>
