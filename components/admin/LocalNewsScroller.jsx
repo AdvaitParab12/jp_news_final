@@ -20,14 +20,77 @@ const AdminPage = () => {
       local: true,
       mumbai: false,
     },
+    source: "local",
   });
 
-  // Fetch all news
+  // Fetch all news and merge duplicates
   const fetchNews = async () => {
     try {
-      const res = await fetch("/api/local-news");
-      const data = await res.json();
-      setNewsList(Array.isArray(data) ? data : []);
+      const [lr, mr] = await Promise.all([
+        fetch("/api/local-news").catch(() => null),
+        fetch("/api/mumbai-news").catch(() => null),
+      ]);
+
+      const localList = lr && lr.ok ? await lr.json() : [];
+      const mumbaiList = mr && mr.ok ? await mr.json() : [];
+
+      // Create a map of items by title+excerpt to detect duplicates
+      const itemMap = new Map();
+
+      // Add local items
+      if (Array.isArray(localList)) {
+        localList.forEach((item) => {
+          const key = `${(item.title || "").trim()}||${(
+            item.excerpt || ""
+          ).trim()}`;
+          if (!itemMap.has(key)) {
+            itemMap.set(key, {
+              ...item,
+              sources: ["local"],
+              localId: item._id,
+              localItem: item,
+            });
+          } else {
+            const existing = itemMap.get(key);
+            existing.sources.push("local");
+            existing.localId = item._id;
+            existing.localItem = item;
+          }
+        });
+      }
+
+      // Add mumbai items
+      if (Array.isArray(mumbaiList)) {
+        mumbaiList.forEach((item) => {
+          const key = `${(item.title || "").trim()}||${(
+            item.excerpt || ""
+          ).trim()}`;
+          if (!itemMap.has(key)) {
+            itemMap.set(key, {
+              ...item,
+              sources: ["mumbai"],
+              mumbaiId: item._id,
+              mumbaiItem: item,
+            });
+          } else {
+            const existing = itemMap.get(key);
+            if (!existing.sources.includes("mumbai")) {
+              existing.sources.push("mumbai");
+            }
+            existing.mumbaiId = item._id;
+            existing.mumbaiItem = item;
+          }
+        });
+      }
+
+      // Convert map to sorted array
+      const merged = Array.from(itemMap.values()).sort((a, b) => {
+        const ta = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const tb = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return tb - ta;
+      });
+
+      setNewsList(merged);
     } catch (err) {
       console.error(err);
     }
@@ -129,10 +192,11 @@ const AdminPage = () => {
         return;
       }
 
-      // If editing existing item (_id present) we update only the local endpoint by default.
-      // (Editing across both collections requires separate IDs.)
+      // If editing existing item (_id present) send PUT to the correct source endpoint.
       if (formData._id) {
-        const res = await fetch(`/api/local-news/${formData._id.toString()}`, {
+        const endpoint =
+          formData.source === "mumbai" ? "/api/mumbai-news" : "/api/local-news";
+        const res = await fetch(`${endpoint}/${formData._id.toString()}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
@@ -167,6 +231,7 @@ const AdminPage = () => {
         category: "",
         date: "",
         scrollers: { local: true, mumbai: false },
+        source: "local",
       });
 
       // Refresh news list
@@ -180,18 +245,77 @@ const AdminPage = () => {
     }
   };
 
-  // Delete news
-  const handleDelete = async (id) => {
-    console.log("Deleting id:", id);
-    if (!confirm("Are you sure you want to delete this news?")) return;
+  // Delete news with support for merged items
+  const handleDelete = async (news) => {
     try {
-      const res = await fetch(`/api/local-news/${id}`, { method: "DELETE" });
-      console.log("Delete response:", res);
-      if (!res.ok) throw new Error("Delete failed");
+      const hasLocal = news.sources?.includes("local");
+      const hasMumbai = news.sources?.includes("mumbai");
 
-      // Remove the deleted item from local state
-      setNewsList((prev) => prev.filter((n) => n._id !== id));
+      // If item exists in both sections, ask which to delete from
+      if (hasLocal && hasMumbai) {
+        const choice = prompt(
+          "Delete from:\n1 - Local News\n2 - Mumbai News\n3 - Both\n\nEnter 1, 2 or 3",
+          "1"
+        );
+        if (!choice) return;
 
+        if (!confirm("Are you sure you want to delete the selected items?"))
+          return;
+
+        const doLocal = choice === "1" || choice === "3";
+        const doMumbai = choice === "2" || choice === "3";
+
+        if (doLocal && news.localId) {
+          const lr = await fetch(`/api/local-news/${news.localId}`, {
+            method: "DELETE",
+          });
+          if (!lr.ok) {
+            const err = await lr.json().catch(() => ({}));
+            throw new Error(err.error || "Local delete failed");
+          }
+        }
+
+        if (doMumbai && news.mumbaiId) {
+          const mr = await fetch(`/api/mumbai-news/${news.mumbaiId}`, {
+            method: "DELETE",
+          });
+          if (!mr.ok) {
+            const err = await mr.json().catch(() => ({}));
+            throw new Error(err.error || "Mumbai delete failed");
+          }
+        }
+
+        await fetchNews();
+        window.dispatchEvent(new Event("newsUpdated"));
+        return;
+      }
+
+      // Item exists in only one section - delete directly
+      const confirmMsg = hasLocal
+        ? "Delete this news from Local News?"
+        : "Delete this news from Mumbai News?";
+
+      if (!confirm(confirmMsg)) return;
+
+      if (hasLocal && news.localId) {
+        const lr = await fetch(`/api/local-news/${news.localId}`, {
+          method: "DELETE",
+        });
+        if (!lr.ok) {
+          const err = await lr.json().catch(() => ({}));
+          throw new Error(err.error || "Local delete failed");
+        }
+      } else if (hasMumbai && news.mumbaiId) {
+        const mr = await fetch(`/api/mumbai-news/${news.mumbaiId}`, {
+          method: "DELETE",
+        });
+        if (!mr.ok) {
+          const err = await mr.json().catch(() => ({}));
+          throw new Error(err.error || "Mumbai delete failed");
+        }
+      }
+
+      await fetchNews();
       window.dispatchEvent(new Event("newsUpdated"));
     } catch (err) {
       console.error("Delete error:", err);
@@ -199,19 +323,25 @@ const AdminPage = () => {
     }
   };
 
-  // Populate form for editing
+  // Populate form for editing (prioritize local, fallback to mumbai)
   const handleEdit = (news) => {
+    const sourceItem = news.localItem || news.mumbaiItem;
+    const source = news.sources?.includes("local") ? "local" : "mumbai";
     setFormData({
-      _id: news._id,
+      _id: source === "mumbai" ? news.mumbaiId : news.localId,
       title: news.title,
       description: news.excerpt,
       image: null,
       preview: news.image,
-      imageTitle: news.image?.title || "",
-      imageDescription: news.image?.description || "",
+      imageTitle: sourceItem?.image?.title || "",
+      imageDescription: sourceItem?.image?.description || "",
       category: news.category || "",
       date: news.date || "",
-      scrollers: { local: true, mumbai: false },
+      scrollers: {
+        local: news.sources?.includes("local"),
+        mumbai: news.sources?.includes("mumbai"),
+      },
+      source: source,
     });
   };
 
@@ -376,6 +506,7 @@ const AdminPage = () => {
                         category: "",
                         date: "",
                         scrollers: { local: true, mumbai: false },
+                        source: "local",
                       })
                     }
                     className="bg-gray-400 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-500 transition"
@@ -403,8 +534,22 @@ const AdminPage = () => {
                         alt={news.title}
                         className="h-16 w-16 object-cover rounded"
                       />
-                      <div>
-                        <h4 className="font-semibold">{news.title}</h4>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h4 className="font-semibold">{news.title}</h4>
+                          <div className="flex gap-1">
+                            {news.sources?.includes("local") && (
+                              <span className="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded">
+                                Local
+                              </span>
+                            )}
+                            {news.sources?.includes("mumbai") && (
+                              <span className="text-xs bg-green-200 text-green-800 px-2 py-1 rounded">
+                                Mumbai
+                              </span>
+                            )}
+                          </div>
+                        </div>
                         <p className="text-sm line-clamp-1 w-250">
                           {news.excerpt}
                         </p>
@@ -418,7 +563,7 @@ const AdminPage = () => {
                         Edit
                       </button>
                       <button
-                        onClick={() => handleDelete(news._id)}
+                        onClick={() => handleDelete(news)}
                         className="bg-red-600 text-white! rounded-xl p-3 h-14 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         Delete

@@ -6,44 +6,12 @@ import Footer from "@/components/Footer";
 import HomeBottomAdBlock from "@/components/HomeBottomAdBlock";
 import { AD_SECTIONS } from "@/lib/adSections";
 import { getSliderImages } from "@/lib/getSliderImages";
-import News from "@/models/LocalNews";
+import LocalNewsModel from "@/models/LocalNews";
+import MumbaiNewsModel from "@/models/MumbaiNews";
 import { connectDB } from "@/lib/mongodb";
+import LocalNewsPaginatedList from "@/components/LocalNewsPaginatedList";
 
-/* Reusable News Card */
-const NewsCard = ({ date, title, excerpt, category, imageUrl }) => (
-  <div className="entry-block-small">
-    <div className="entry-image">
-      <Link href="/news-details" className="img-link">
-        <Image
-          src={imageUrl}
-          alt={title}
-          width={800}
-          height={500}
-          className="img-responsive img-full"
-        />
-      </Link>
-    </div>
-
-    <div className="entry-content">
-      <h4>
-        <span className="day news-date">{date}</span>
-      </h4>
-      <p>
-        <Link href="/news-details" className="external-link">
-          {title}
-        </Link>
-      </p>
-      <p style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-        <Link href="/news-details" className="external-link">
-          {excerpt}
-        </Link>
-      </p>
-      <div>
-        <span className="read-more">{category}</span>
-      </div>
-    </div>
-  </div>
-);
+// Card UI moved to client component for pagination
 
 export default async function LocalNews() {
   /* Ads */
@@ -52,9 +20,54 @@ export default async function LocalNews() {
     .map((img) => img?.url)
     .filter(Boolean);
 
-  /* MongoDB */
+  /* MongoDB - Fetch both collections */
   await connectDB();
-  const newsData = await News.find().sort({ createdAt: -1 }).lean(); // CRITICAL
+  const localNewsData = await LocalNewsModel.find()
+    .sort({ createdAt: -1 })
+    .lean();
+  const mumbaiNewsData = await MumbaiNewsModel.find()
+    .sort({ createdAt: -1 })
+    .lean();
+
+  // Merge and deduplicate by title+excerpt
+  const itemMap = new Map();
+
+  localNewsData.forEach((item) => {
+    const key = `${(item.title || "").trim()}||${(item.excerpt || "").trim()}`;
+    if (!itemMap.has(key)) {
+      itemMap.set(key, {
+        ...item,
+        sections: ["local"],
+      });
+    } else {
+      const existing = itemMap.get(key);
+      if (!existing.sections.includes("local")) {
+        existing.sections.push("local");
+      }
+    }
+  });
+
+  mumbaiNewsData.forEach((item) => {
+    const key = `${(item.title || "").trim()}||${(item.excerpt || "").trim()}`;
+    if (!itemMap.has(key)) {
+      itemMap.set(key, {
+        ...item,
+        sections: ["mumbai"],
+      });
+    } else {
+      const existing = itemMap.get(key);
+      if (!existing.sections.includes("mumbai")) {
+        existing.sections.push("mumbai");
+      }
+    }
+  });
+
+  // Convert to array and sort by date
+  const newsData = Array.from(itemMap.values()).sort((a, b) => {
+    const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+    const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+    return dateB - dateA;
+  });
 
   return (
     <div id="wrapper" data-color="red">
@@ -74,34 +87,7 @@ export default async function LocalNews() {
                     <h3 className="subtitle">Local News</h3>
                   </div>
 
-                  <div className="article">
-                    {newsData.map((item) => (
-                      <NewsCard
-                        key={item._id}
-                        date={item.date}
-                        title={item.title}
-                        // excerpt={item.excerpt}
-                        category={item.category}
-                        imageUrl={item.image?.url}
-                      />
-                    ))}
-                  </div>
-
-                  {/* Pagination (static for now) */}
-                  {/* <ul className="pagination">
-                    <li>
-                      <Link href="#">‹</Link>
-                    </li>
-                    <li className="active">
-                      <Link href="#">1</Link>
-                    </li>
-                    <li>
-                      <Link href="#">2</Link>
-                    </li>
-                    <li>
-                      <Link href="#">›</Link>
-                    </li>
-                  </ul> */}
+                  <LocalNewsPaginatedList items={newsData} />
                 </div>
 
                 {/* Sidebar */}

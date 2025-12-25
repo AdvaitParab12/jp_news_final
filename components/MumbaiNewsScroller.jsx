@@ -53,7 +53,7 @@ export default function MumbaiNewsBlock() {
                   </div>
                   <div className="item-content">
                     <h4 className="ellipsis">
-                      <Link href={`/local-news/${item._id}`}>{item.title}</Link>
+                      <Link  className="line-clamp-2" href={`/local-news/${item._id}`}>{item.title}</Link>
                     </h4>
                     {/* <div className="text-xs text-gray-500 mb-1">
                       {item.category}
